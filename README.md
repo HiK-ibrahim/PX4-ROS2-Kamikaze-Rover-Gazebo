@@ -3,6 +3,7 @@
 An autonomous **red-target tracking (Kamikaze)** system for differential rovers using **PX4 Autopilot**, **ROS 2**, **Gazebo**, and **OpenCV**.
 
 ---
+![kamikaze_demo](https://github.com/user-attachments/assets/4613838b-e36a-4da0-be95-a5cf1709fb20)
 
 ## 📌 Project Overview
 
@@ -101,6 +102,7 @@ Controller Node (P-Control)
       ▼
 PX4 Rover Controller
 ```
+<img width="603" height="259" alt="rqt_graph" src="https://github.com/user-attachments/assets/7236ff13-87df-4910-b219-3d7f0e138020" />
 
 ---
 
@@ -188,6 +190,68 @@ Sistem, **Algılama (Görüntü İşleme)** ve **Kontrol (Hareket)** bileşenler
 
 ---
 ---
+
+## 📷 PX4 Rover’a Kamera Ekleme (SDF)
+
+PX4 rover modeline ön kamera eklemek için **SDF dosyasında** (`model.sdf`) aşağıdaki iki adım uygulanmalıdır. Kamera, ROS 2–Gazebo bridge üzerinden `/front_camera/image` topic’ine görüntü basacak şekilde yapılandırılmıştır.
+
+---
+
+### 1️⃣ Kamera Linki (Görsel ve Teknik Özellikler)
+
+Bu bölüm kameranın:
+
+* Robot üzerindeki **konumunu**
+* **Çözünürlüğünü**
+* **Görüş açısını (FOV)**
+* Yayınladığı **ROS topic**’ini
+
+tanımlar.
+
+📌 **Bu kodu `<model>` etiketi içinde**, diğer `<link>` tanımlarının yanına ekleyin.
+
+```xml
+<link name="camera_link">
+  <pose relative_to="base_link">0.35 0 0.25 0 0 0</pose>
+
+  <sensor name="front_camera" type="camera">
+    <always_on>true</always_on>
+    <update_rate>30</update_rate>
+    <topic>/front_camera/image</topic>
+
+    <camera>
+      <horizontal_fov>1.396</horizontal_fov>
+      <image>
+        <width>640</width>
+        <height>480</height>
+        <format>R8G8B8</format>
+      </image>
+      <clip>
+        <near>0.1</near>
+        <far>100</far>
+      </clip>
+    </camera>
+  </sensor>
+</link>
+```
+
+---
+
+### 2️⃣ Kamera Eklemi (Bağlantı – Joint)
+
+Bu kod, yukarıda oluşturulan `camera_link`’i robotun ana gövdesine (`base_link`) **sabit (fixed)** şekilde bağlar.
+
+📌 **Bu kodu `<joint>` tanımlarının olduğu bölüme ekleyin.**
+
+```xml
+<joint name="camera_joint" type="fixed">
+  <parent>base_link</parent>
+  <child>camera_link</child>
+</joint>
+```
+
+
+
 
 ## ✨ Author
 
