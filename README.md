@@ -187,14 +187,6 @@ Sistem, **Algılama (Görüntü İşleme)** ve **Kontrol (Hareket)** bileşenler
   * PX4'ün anlayacağı `ManualControlSetpoint` mesajını üretir
 
 ---
-
-## ⚠️ Notes
-
-* PX4 **Manual Mode** aktif olmalıdır
-* Rover arm edilmiş olmalıdır
-* Kamera açısı ve HSV eşikleri simülasyona göre ayarlanmalıdır
-
----
 ---
 
 ## ✨ Author
